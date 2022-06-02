@@ -27,12 +27,16 @@ export const App = () => {
     const [searchSongModal, setSearchSongModal] = useState(false)
     const [playlistModal, setPlaylistModal] = useState(false)
     const [playlists, setPlaylists] = useState([])
+    const [isPaused, setIsPaused] = useState(false)
 
     const handleChangeSong = ({ target }) => {
         const {id, value} = target
         setSong({...song, [id]: value})
     }
 
+    const handlePauseClick = () => {
+        setIsPaused(!isPaused)
+    }
     const handleSubmitModal = () => {
         setSongList([...songList, song])
         setCurrentSong(song)
@@ -70,18 +74,22 @@ export const App = () => {
 
     useEffect(() => {
         const intervalReference = setInterval(() => {
-            if (currentTime>0){
+            if (currentTime>0 && !isPaused){
                 setCurrentTime((_currentTime) => _currentTime-1000)
-            
-            }else{
+                console.log("corriendo")
+            }else if (currentTime>0 && isPaused){
+                setCurrentTime(currentTime)
+                console.log("pausa")
+            } else{
                 setSongPlaying(false)
                 clearInterval(intervalReference)
+                console.log("terminatimer")
             }
         },1000)
         return () => {
             clearInterval(intervalReference)
         }
-    }, [songPlaying, currentTime])
+    }, [songPlaying, currentTime, isPaused])
   return (
     <div className="App">
         <div className="ButtonBar">
@@ -94,7 +102,7 @@ export const App = () => {
                 <Button title={"Random Song"} handleClick={handleRandomClick} icon={<FaRandom />} />
             </div> : <div />}
         {songPlaying && 
-            <Timer currentSong={currentSong.name} currentTime={currentTime} />
+            <Timer currentSong={currentSong.name} currentTime={currentTime} isPlaying={isPaused} handlePauseClick={handlePauseClick}/>
         }
         {playlists.map((playlist) => {
             const FilteredSongs = songList.filter((songObject) => songObject.playlist == playlist)
