@@ -1,0 +1,22 @@
+.formBox input{
+    border-radius: 3px;
+    border: none;
+    height: 30px;
+    width: 150px;
+}
+.formBox {
+    margin-left: 50px;
+    
+}
+
+.formBox label{
+    margin-bottom: 30px;
+}
+#durationSeconds{
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.formBox span{
+    font-size: 16px;
+}
