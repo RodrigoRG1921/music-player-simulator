@@ -1,11 +1,9 @@
 .playlistSquare {
-    border: 1px solid white;    
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+   border-top: 1px solid white;
+   padding: 10px;
+   margin-left: 12px;
 }
 
-.playlistSquare h4{
-    margin-top: 0;
+.playlistSquare span{
     cursor: pointer;
 }
