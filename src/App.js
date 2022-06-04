@@ -11,6 +11,8 @@ import { AddPlaylistModal } from './components/AddPlaylistModal'
 import {IoMdAddCircleOutline} from 'react-icons/io'
 
 
+import { SongService } from './lib/service/songs'
+
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -28,6 +30,10 @@ export const App = () => {
     const [playlistModal, setPlaylistModal] = useState(false)
     const [playlists, setPlaylists] = useState([])
     const [isPaused, setIsPaused] = useState(false)
+
+    useEffect(() => {
+      setSongList(SongService.createSongs({ quantity: 50 }))
+    }, []);
 
     const handleSkipButton = (event) => {
         console.log(event.target.id)
