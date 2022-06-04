@@ -8,7 +8,7 @@ import { AddModal } from './components/AddModal'
 import { BsSearch } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import { AddPlaylistModal } from './components/AddPlaylistModal'
-
+import {IoMdAddCircleOutline} from 'react-icons/io'
 
 
 function getRandomInt(min, max) {
@@ -22,7 +22,8 @@ export const App = () => {
     const [songPlaying, setSongPlaying] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [currentSong, setCurrentSong] = useState("")
-    const [currentPlaylist, setCurrentPlaylist] = useState("All")
+    const [playlist, setPlaylist] = useState("")
+    const [currentPlaylist, setCurrentPlaylist] = useState({name:"", songs:[], description:""})
     const [searchSongModal, setSearchSongModal] = useState(false)
     const [playlistModal, setPlaylistModal] = useState(false)
     const [playlists, setPlaylists] = useState([])
@@ -73,12 +74,15 @@ export const App = () => {
     }
 
     const handleChangePlaylist = ({target}) => {
-        setCurrentPlaylist(target.value)
+        const {id, value} = target
+        setCurrentPlaylist({...currentPlaylist, [id]: value})
+        console.log(currentPlaylist)
+        console.log(playlists)
         
     }
 
-    const handleSubmitPlaylistModal = () => {
-        setPlaylists([...playlists, currentPlaylist])
+    const handleSubmitPlaylistModal = (newPlaylist) => {
+        setPlaylists([...playlists, newPlaylist])
         setPlaylistModal(false)
     }
 
@@ -105,20 +109,23 @@ export const App = () => {
       
     <div className="app">
         <div className="leftNavbar">
-            <Button title={"Search Song"} handleClick={() => setSearchSongModal(true)} icon={<BsSearch />}  />
-            <Button title={"Create Playlist"} handleClick={() => setPlaylistModal(true)} icon={<VscDiffAdded />}  />
-            <Playlist playlist={"All"} handlePlaylistClick={handlePlaylistClick}  />
-            {playlists.map((playlist) => {
+            <Button title={"Search Song"} icon={<BsSearch />}  />
+            <Button title={"New Song"} handleClick={() => setSearchSongModal(true)} icon={<IoMdAddCircleOutline />}  />
+            <Button title={"Create Playlist"} 
+                handleClick={() => setPlaylistModal(true)}
+                icon={<VscDiffAdded />}  />
+            <Playlist playlist={{name:"All", songs:songList, description:""}} handlePlaylistClick={handlePlaylistClick}  />
+            {playlists.map((playlistObject) => {
             
             return ( 
-                <Playlist playlist={playlist} handlePlaylistClick={handlePlaylistClick}  />
+                <Playlist playlist={playlistObject} handlePlaylistClick={handlePlaylistClick}  />
             )
         })}
         </div>
         <div className="app-content">
         {songList.length>0 ? 
             <div >
-                <SongList songList={songList} handleSongClick={handleSongClick} currentPlaylist={currentPlaylist}/>
+                <SongList handleSongClick={handleSongClick} currentPlaylist={currentPlaylist}/>
             </div> : <div />}
         </div>
         <div className='player'>
@@ -140,6 +147,7 @@ export const App = () => {
         />
         <AddPlaylistModal show={playlistModal} handleClose={() => setPlaylistModal(false)}
                           handleChangePlaylist={handleChangePlaylist} handleSubmitModal={handleSubmitPlaylistModal}
+                          playlist={currentPlaylist}
         />
 
     </div>

@@ -12,20 +12,22 @@ export const AddPlaylistModal = ({ show, handleClose, handleSubmitModal, handleC
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Playlist Name</Form.Label>
-              <Form.Control id="name" onChange={handleChangePlaylist} value={playlist}/>
+              <Form.Control id="name" onChange={handleChangePlaylist} value={playlist.name}/>
             </Form.Group>
-            <FloatingLabel controlId="floatingTextarea2" label="Add an optional description">
-                <Form.Control
+            <FloatingLabel label="Add an optional description">
+                <Form.Control 
+                id="description"
                 as="textarea"
                 placeholder="Leave a comment here"
                 style={{ height: '100px' }}
-                id="description"
+                onChange={handleChangePlaylist}
+                value={playlist.description}
                 />
             </FloatingLabel>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleSubmitModal}>Submit</Button>
+          <Button onClick={() => handleSubmitModal(playlist)}>Submit</Button>
         </Modal.Footer>
       </Modal>
   )

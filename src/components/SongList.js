@@ -1,27 +1,22 @@
 import React from 'react'
 import { AiFillPlayCircle } from 'react-icons/ai'
 import './SongList.css'
-export const SongList = ({ songList, handleSongClick, currentPlaylist }) => {
-  let FilteredSongs = []
-  if (currentPlaylist == "All"){
-    FilteredSongs = songList
-  } else{
-    FilteredSongs = songList.filter((songObject) => songObject.playlist == currentPlaylist)
-  } 
-  
+export const SongList = ({ handleSongClick, currentPlaylist }) => {
   return (
     <div className="songList">
       <div className='songList-title' >
-        <h4>{currentPlaylist}</h4>
+        <h4>{currentPlaylist.name}</h4>
+        <p>{currentPlaylist.description}</p>
       </div>
       <div className="songList-content">
-        {FilteredSongs.map((songObject) => {
+        {currentPlaylist.songs.map((songObject) => {
               return (
                 <div className="songList-song" key={songObject.name+"1"} >
                   <div>
                     <AiFillPlayCircle onClick={() => handleSongClick(songObject.durationMinutes, songObject.durationSeconds, songObject) } style={{cursor: "pointer"}} />
                     <span>{songObject.name}</span>
                   </div>
+                  
                   <span>
                     {songObject.durationMinutes}:{songObject.durationSeconds}
                   </span>
