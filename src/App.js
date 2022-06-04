@@ -8,7 +8,7 @@ import { AddModal } from './components/AddModal'
 import { BsSearch } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import { AddPlaylistModal } from './components/AddPlaylistModal'
-
+import {IoMdAddCircleOutline} from 'react-icons/io'
 
 
 function getRandomInt(min, max) {
@@ -22,7 +22,7 @@ export const App = () => {
     const [songPlaying, setSongPlaying] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [currentSong, setCurrentSong] = useState("")
-    const [currentPlaylist, setCurrentPlaylist] = useState("All")
+    const [currentPlaylist, setCurrentPlaylist] = useState("All") //{name:"", songs:["",""]}
     const [searchSongModal, setSearchSongModal] = useState(false)
     const [playlistModal, setPlaylistModal] = useState(false)
     const [playlists, setPlaylists] = useState([])
@@ -105,7 +105,8 @@ export const App = () => {
       
     <div className="app">
         <div className="leftNavbar">
-            <Button title={"Search Song"} handleClick={() => setSearchSongModal(true)} icon={<BsSearch />}  />
+            <Button title={"Search Song"} icon={<BsSearch />}  />
+            <Button title={"New Song"} handleClick={() => setSearchSongModal(true)} icon={<IoMdAddCircleOutline />}  />
             <Button title={"Create Playlist"} handleClick={() => setPlaylistModal(true)} icon={<VscDiffAdded />}  />
             <Playlist playlist={"All"} handlePlaylistClick={handlePlaylistClick}  />
             {playlists.map((playlist) => {
