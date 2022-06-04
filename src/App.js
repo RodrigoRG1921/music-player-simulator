@@ -9,7 +9,7 @@ import { BsSearch } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import { AddPlaylistModal } from './components/AddPlaylistModal'
 
-
+import { SongService } from './lib/service/songs'
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -27,6 +27,10 @@ export const App = () => {
     const [playlistModal, setPlaylistModal] = useState(false)
     const [playlists, setPlaylists] = useState([])
     const [isPaused, setIsPaused] = useState(false)
+
+    useEffect(() => {
+      setSongList(SongService.createSongs({ quantity: 50 }))
+    }, []);
 
     const handleSkipButton = (event) => {
         console.log(event.target.id)
