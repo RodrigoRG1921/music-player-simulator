@@ -11,7 +11,7 @@ import { AddPlaylistModal } from './components/AddPlaylistModal'
 
 
 
-function getRandomInt(min, max) {
+const getRandomInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min)}
