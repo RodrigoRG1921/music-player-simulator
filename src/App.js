@@ -8,7 +8,7 @@ import { AddModal } from './components/AddModal'
 import { BsSearch } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import AddPlaylistModal from './components/AddPlaylistModal'
-
+import { IoMdAddCircleOutline } from 'react-icons/io'
 import { SongService } from './lib/service/songs'
 
 function getRandomInt(min, max) {
@@ -117,6 +117,7 @@ export const App = () => {
 
       <div className="leftNavbar">
         <Button title={"Search Song"} handleClick={() => setSearchSongModal(true)} icon={<BsSearch />}  />
+        <Button title={"New Song"} handleClick={() => setSearchSongModal(true)} icon={<IoMdAddCircleOutline />}  />
         <Button title={"Create Playlist"} handleClick={() => setIsPlaylistModalOpen(true)} icon={<VscDiffAdded />}  />
         { playlists.map((playlist, index) =>
           <Playlist key={ index } { ...playlist } handlePlaylistClick={ handlePlaylistClick } />) }
