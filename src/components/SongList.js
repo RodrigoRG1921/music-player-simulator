@@ -8,7 +8,8 @@ import './SongList.css'
 const SongList = ({
   songs,
   handleSongClick,
-  playlist
+  playlist,
+  handleAddSongToPlaylist
 }) => (
   <div className="songList">
     <div className='songList-title' >
@@ -24,9 +25,12 @@ const SongList = ({
               style={{ cursor: "pointer" }} />
             <span>{song.name}</span>
           </div>
-          <span>
-            { `${song.durationMinutes}:${song.durationSeconds}` }
-          </span>
+          <div>
+            <RiPlayListAddFill onClick={() => handleAddSongToPlaylist(song)} style={{marginRight:"20px"}} />
+            <span>
+              { `${song.durationMinutes}:${song.durationSeconds}` }
+            </span>
+          </div>
         </div>
       )) }
     </div>
