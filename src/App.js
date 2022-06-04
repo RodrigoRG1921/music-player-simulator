@@ -9,7 +9,7 @@ import { BsSearch } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import { AddPlaylistModal } from './components/AddPlaylistModal'
 import {IoMdAddCircleOutline} from 'react-icons/io'
-
+import { AddSongToPlaylistModal } from './components/AddSongToPlaylistModal'
 
 import { SongService } from './lib/service/songs'
 
@@ -24,12 +24,14 @@ export const App = () => {
     const [songPlaying, setSongPlaying] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [currentSong, setCurrentSong] = useState("")
-    const [playlist, setPlaylist] = useState("")
+    const [playlist, setPlaylist] = useState({name:"", songs:[], description:""})
     const [currentPlaylist, setCurrentPlaylist] = useState({name:"", songs:[], description:""})
     const [searchSongModal, setSearchSongModal] = useState(false)
     const [playlistModal, setPlaylistModal] = useState(false)
     const [playlists, setPlaylists] = useState([])
     const [isPaused, setIsPaused] = useState(false)
+    const [addSongToPlaylistModal, setAddSongToPlaylistModal] = useState(false)
+
 
     useEffect(() => {
       setSongList(SongService.createSongs({ quantity: 50 }))
@@ -58,6 +60,7 @@ export const App = () => {
         setCurrentSong(song)
         setSong({name:"", durationMinutes:"", durationSeconds:""})
         setSearchSongModal(false);
+        
     }
 
     const handleSongClick = (minutes, seconds, song1) => {
@@ -65,6 +68,7 @@ export const App = () => {
         setCurrentSong(song1)
         setCurrentTime(parseInt(totalTime))
         setSongPlaying(true)
+        console.log(currentSong)
         
     }
 
@@ -82,19 +86,22 @@ export const App = () => {
     const handleChangePlaylist = ({target}) => {
         const {id, value} = target
         setCurrentPlaylist({...currentPlaylist, [id]: value})
-        console.log(currentPlaylist)
-        console.log(playlists)
         
     }
 
     const handleSubmitPlaylistModal = (newPlaylist) => {
-        setPlaylists([...playlists, newPlaylist])
+        setPlaylists([...playlists, playlist])
+        
         setPlaylistModal(false)
     }
 
     const handlePlaylistClick = (playlist) => {
         setCurrentPlaylist(playlist)
     }
+    const handleAddPlaylist = () => {
+        setAddSongToPlaylistModal(true)
+    }
+
 
     useEffect(() => {
         const intervalReference = setInterval(() => {
@@ -131,7 +138,7 @@ export const App = () => {
         <div className="app-content">
         {songList.length>0 ? 
             <div >
-                <SongList handleSongClick={handleSongClick} currentPlaylist={currentPlaylist}/>
+                <SongList handleSongClick={handleSongClick} currentPlaylist={currentPlaylist} handleAddPlaylist={handleAddPlaylist} />
             </div> : <div />}
         </div>
         <div className='player'>
@@ -155,6 +162,7 @@ export const App = () => {
                           handleChangePlaylist={handleChangePlaylist} handleSubmitModal={handleSubmitPlaylistModal}
                           playlist={currentPlaylist}
         />
+        <AddSongToPlaylistModal playlists={playlists} show={addSongToPlaylistModal} handleClose={() => setAddSongToPlaylistModal(false)} />
 
     </div>
   )
