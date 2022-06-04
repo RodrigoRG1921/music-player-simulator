@@ -1,0 +1,7 @@
+.button-bar {
+    cursor: pointer;   
+}
+
+.button-bar span{
+    margin-left: 5px;
+}

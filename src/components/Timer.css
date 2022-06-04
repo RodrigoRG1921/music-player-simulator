@@ -1,0 +1,14 @@
+.playBox{
+    background-color: gray;
+    border-radius: 10px;
+    padding: 20px;
+    border: solid 2px white;
+    margin: auto;
+}
+.playBox h4{
+    margin-top: 0;
+}
+
+.playBox-time{
+    flex: 2;
+}

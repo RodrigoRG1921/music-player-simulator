@@ -1,0 +1,21 @@
+.SongList-song span{
+    margin-left:10px;
+    
+}
+.SongList-song {
+    margin:5px;
+
+}
+.SongList-song:hover{
+   
+    background-color: rgba(122, 113, 122, 0.4);
+}
+.SongList{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.SongList h4{
+    text-align: center;
+}
