@@ -1,5 +1,8 @@
 .button-bar {
     cursor: pointer;   
+    padding: 10px;
+    font-size: 20px;
+    margin-left: 12px;
 }
 
 .button-bar span{

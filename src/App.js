@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from './components/Button'
-import { Form } from './components/Form'
 import { SongList } from './components/SongList'
 import './App.css'
 import { Timer } from './components/Timer'
 import { Playlist } from './components/Playlist'
 import { AddModal } from './components/AddModal'
 import { BsSearch } from 'react-icons/bs'
-import { FaRandom } from 'react-icons/fa'
 import { VscDiffAdded } from 'react-icons/vsc'
 import { AddPlaylistModal } from './components/AddPlaylistModal'
+
 
 
 function getRandomInt(min, max) {
@@ -23,12 +22,22 @@ export const App = () => {
     const [songPlaying, setSongPlaying] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [currentSong, setCurrentSong] = useState("")
-    const [currentPlaylist, setCurrentPlaylist] = useState([])
+    const [currentPlaylist, setCurrentPlaylist] = useState("All")
     const [searchSongModal, setSearchSongModal] = useState(false)
     const [playlistModal, setPlaylistModal] = useState(false)
     const [playlists, setPlaylists] = useState([])
     const [isPaused, setIsPaused] = useState(false)
 
+    const handleSkipButton = (event) => {
+        console.log(event.target.id)
+        /*if (target.id=="next"){
+            console.log(currentSong)
+            console.log(songList.indexOf(currentSong))
+            setCurrentSong(songList[songList.indexOf(currentSong)+1])
+        } else if (target.id=="back"){
+            setCurrentSong(songList[songList.indexOf(currentSong)-1])
+        } */
+    }
     const handleChangeSong = ({ target }) => {
         const {id, value} = target
         setSong({...song, [id]: value})
@@ -53,12 +62,14 @@ export const App = () => {
     }
 
     const handleRandomClick = () => {
-        getRandomInt(0,songList.length)
-        setSongPlaying(true)
-        setCurrentSong(songList[getRandomInt(0,songList.length)])
-        console.log("currentSong" + currentSong)
-        const totalTime=((currentSong.durationMinutes*60000)+(currentSong.durationSeconds*1000))
-        setCurrentTime(parseInt(totalTime))
+        if(songList.length>0){
+            getRandomInt(0,songList.length)
+            setSongPlaying(true)
+            setCurrentSong(songList[getRandomInt(0,songList.length)])
+            const totalTime=((currentSong.durationMinutes*60000)+(currentSong.durationSeconds*1000))
+            setCurrentTime(parseInt(totalTime))
+            setIsPaused(false)
+        } return
     }
 
     const handleChangePlaylist = ({target}) => {
@@ -69,21 +80,21 @@ export const App = () => {
     const handleSubmitPlaylistModal = () => {
         setPlaylists([...playlists, currentPlaylist])
         setPlaylistModal(false)
-        console.log(playlists)
+    }
+
+    const handlePlaylistClick = (playlist) => {
+        setCurrentPlaylist(playlist)
     }
 
     useEffect(() => {
         const intervalReference = setInterval(() => {
             if (currentTime>0 && !isPaused){
                 setCurrentTime((_currentTime) => _currentTime-1000)
-                console.log("corriendo")
             }else if (currentTime>0 && isPaused){
                 setCurrentTime(currentTime)
-                console.log("pausa")
             } else{
                 setSongPlaying(false)
-                clearInterval(intervalReference)
-                console.log("terminatimer")
+                clearInterval(intervalReference)           
             }
         },1000)
         return () => {
@@ -91,25 +102,34 @@ export const App = () => {
         }
     }, [songPlaying, currentTime, isPaused])
   return (
-    <div className="App">
-        <div className="ButtonBar">
+      
+    <div className="app">
+        <div className="leftNavbar">
             <Button title={"Search Song"} handleClick={() => setSearchSongModal(true)} icon={<BsSearch />}  />
             <Button title={"Create Playlist"} handleClick={() => setPlaylistModal(true)} icon={<VscDiffAdded />}  />
-        </div>
-        {songList.length>0 ? 
-            <div>
-                <SongList songList={songList} handleSongClick={handleSongClick} />
-                <Button title={"Random Song"} handleClick={handleRandomClick} icon={<FaRandom />} />
-            </div> : <div />}
-        {songPlaying && 
-            <Timer currentSong={currentSong.name} currentTime={currentTime} isPlaying={isPaused} handlePauseClick={handlePauseClick}/>
-        }
-        {playlists.map((playlist) => {
-            const FilteredSongs = songList.filter((songObject) => songObject.playlist == playlist)
+            <Playlist playlist={"All"} handlePlaylistClick={handlePlaylistClick}  />
+            {playlists.map((playlist) => {
+            
             return ( 
-                <Playlist playlists={playlist} songList={FilteredSongs} />
+                <Playlist playlist={playlist} handlePlaylistClick={handlePlaylistClick}  />
             )
         })}
+        </div>
+        <div className="app-content">
+        {songList.length>0 ? 
+            <div >
+                <SongList songList={songList} handleSongClick={handleSongClick} currentPlaylist={currentPlaylist}/>
+            </div> : <div />}
+        </div>
+        <div className='player'>
+            <Timer currentSong={currentSong.name}
+                currentTime={currentTime}
+                isPlaying={isPaused}
+                handlePauseClick={handlePauseClick}
+                handleRandomClick={handleRandomClick}
+                handleSkipButton={handleSkipButton}
+                /> 
+        </div>
 
         <AddModal handleClose={() => setSearchSongModal(false)}
                   show={searchSongModal}

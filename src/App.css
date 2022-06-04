@@ -1,12 +1,14 @@
-.App{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2rem;
-    justify-content: center;
+.app{
+    height: 100vh;
     font-size: 21px;
     background-color: black;
     color: white;
+    display: grid;
+    grid-template-columns: 0.75fr 3fr;
+    grid-template-rows: 3fr 0.5fr;
+    grid-template-areas:
+        "navbar content "
+        "footer footer";
     
 }
 html, body{
@@ -15,4 +17,32 @@ html, body{
 }
 .ButtonBar{
     margin-right: 700px;
+}
+.player {
+    grid-area: footer;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    border-top: 0.2px solid rgba(255, 255, 255, 0.1);
+    background-color: rgb(60, 60, 60);
+
+    
+}
+
+.leftNavbar{
+    margin-top: 20px;
+    grid-area: navbar;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    overflow-y:scroll;
+
+}
+.app-content {
+    padding: 40px;
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    background: rgb(60, 60, 60)   ;
+
 }

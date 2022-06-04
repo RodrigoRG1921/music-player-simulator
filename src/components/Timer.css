@@ -1,14 +1,28 @@
 .playBox{
-    background-color: gray;
-    border-radius: 10px;
-    padding: 20px;
-    border: solid 2px white;
-    margin: auto;
-}
-.playBox h4{
-    margin-top: 0;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    height: 100px;
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.75)
 }
 
-.playBox-time{
-    flex: 2;
+.playBox-icons :hover {
+    color: white;
+}
+
+.playBox-central-icons {
+    color: white;
+    cursor: pointer;
+
+}
+.playBox-icons{
+    cursor: pointer;
+}
+
+.playBox-center{
+    display: flex;
+    align-items: center;
 }

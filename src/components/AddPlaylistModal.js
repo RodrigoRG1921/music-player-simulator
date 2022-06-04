@@ -19,6 +19,7 @@ export const AddPlaylistModal = ({ show, handleClose, handleSubmitModal, handleC
                 as="textarea"
                 placeholder="Leave a comment here"
                 style={{ height: '100px' }}
+                id="description"
                 />
             </FloatingLabel>
           </Form>
