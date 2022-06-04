@@ -9,8 +9,8 @@ import { BsSearch } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import AddPlaylistModal from './components/AddPlaylistModal'
 import { AddSongToPlaylistModal } from './components/AddSongToPlaylistModal'
+import { IoMdAddCircleOutline } from 'react-icons/io'
 import { SongService } from './lib/service/songs'
-import {IoMdAddCircleOutline} from 'react-icons/io'
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
