@@ -8,9 +8,9 @@ import { AddModal } from './components/AddModal'
 import { BsSearch } from 'react-icons/bs'
 import { VscDiffAdded } from 'react-icons/vsc'
 import AddPlaylistModal from './components/AddPlaylistModal'
+import { AddSongToPlaylistModal } from './components/AddSongToPlaylistModal'
 import { IoMdAddCircleOutline } from 'react-icons/io'
 import { SongService } from './lib/service/songs'
-
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -18,17 +18,19 @@ function getRandomInt(min, max) {
 }
 
 export const App = () => {
+  const [addSongToPlaylistModal, setAddSongToPlaylistModal] = useState(false)
   const [songList, setSongList] = useState([])
   const [playlists, setPlaylists] = useState([{ name: 'All', description: '', id: 0, songs: [] }])
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
   const [currentPlaylist, setCurrentPlaylist] = useState(0)
-
   const [song, setSong] = useState({name:"", durationMinutes:null, durationSeconds:null, playlist:"default"})
   const [songPlaying, setSongPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [currentSong, setCurrentSong] = useState("")
   const [searchSongModal, setSearchSongModal] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
+  const [songToPlaylist, setSongToPlaylist] = useState({})
+
 
   useEffect(() => {
     setSongList(SongService.createSongs({ quantity: 50 }))
@@ -45,7 +47,6 @@ export const App = () => {
   }
 
   const handleSkipButton = (event) => {
-      console.log(event.target.id)
       /*if (target.id=="next"){
           console.log(currentSong)
           console.log(songList.indexOf(currentSong))
@@ -92,8 +93,19 @@ export const App = () => {
   }
 
   const handleChangePlaylist = ({target}) => {
-      setCurrentPlaylist(target.value)
-      
+      setCurrentPlaylist(target.value) 
+  }
+
+  const handleAddSongToPlaylist = (song) => {
+    setSongToPlaylist(song)
+    setAddSongToPlaylistModal(true)
+  } 
+
+  const handleSubmitSongToPlaylistModal = (playlistId) => {
+    const copyPlaylists = [...playlists]
+    copyPlaylists[playlistId].songs.push(songToPlaylist)
+    setPlaylists(copyPlaylists)
+    setAddSongToPlaylistModal(false)
   }
 
   useEffect(() => {
@@ -129,7 +141,8 @@ export const App = () => {
               <SongList
                 songs={ currentPlaylist === 0 ? songList : playlists[currentPlaylist].songs }
                 handleSongClick={ handleSongClick }
-                playlist={ playlists[currentPlaylist] } />
+                playlist={ playlists[currentPlaylist] }
+                handleAddSongToPlaylist={handleAddSongToPlaylist} />
             </div>
           ) }
         </div>
@@ -150,6 +163,13 @@ export const App = () => {
                   handleSubmitModal={handleSubmitModal}
                  handleChangeSong={handleChangeSong}
                  playlists ={playlists}
+        />
+        
+      <AddSongToPlaylistModal
+        playlists={playlists}
+        show={addSongToPlaylistModal}
+        handleClose={() => setAddSongToPlaylistModal(false)} 
+        handleSubmit={handleSubmitSongToPlaylistModal}
         />
 
       <AddPlaylistModal
