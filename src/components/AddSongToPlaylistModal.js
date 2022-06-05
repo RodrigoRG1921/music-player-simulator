@@ -19,7 +19,7 @@ export const AddSongToPlaylistModal = ({playlists, show, handleClose, handleSubm
                 id="playlist" 
                 onChange={(e) => setSelectedPlaylist(e.target.value)} >
                 {playlists.map((playlist) => (
-                    <option value={playlist.id} >{playlist.name}</option> 
+                    <option key={playlist.id} value={playlist.id} >{playlist.name}</option> 
                 ))}
               </Form.Select>
             </Form.Group>

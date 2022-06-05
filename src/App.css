@@ -44,5 +44,5 @@ html, body{
     display: flex;
     flex-direction: column;
     background: rgb(60, 60, 60)   ;
-
+    overflow-y: scroll;
 }

@@ -4,7 +4,7 @@ import { Button, Modal, FormControl, InputGroup,  } from "react-bootstrap";
 
 export const AddModal = ({ handleClose, show, handleSubmitModal, song, handleChangeSong, playlists}) => {
   return (
-    
+
       <Modal show={show} onHide={handleClose} style={{color: "black"}}> 
         <Modal.Header closeButton>
           <Modal.Title> Search for a song </Modal.Title>
@@ -38,11 +38,11 @@ export const AddModal = ({ handleClose, show, handleSubmitModal, song, handleCha
              </InputGroup>
             <Form.Group className="mb-3">
               <Form.Label> Add to playlist </Form.Label>
-              <Form.Select aria-label="Default select example" id="playlist" value={song.playlist} onChange={handleChangeSong}>
+              <Form.Select aria-label="Default select example" id="playlist" value={song.playlist}>
                 <option id="Favorites" >All songs</option>
-                {playlists.map((playlist) => (
-                  <option id={playlist} key={playlist + 1}>{playlist}</option>
-                ))}
+               /* {playlists.map((playlist) => (
+                  <option id={playlist} key={playlist.id}>{playlist.name}</option>
+                ))} */
               </Form.Select>
             </Form.Group>
           </Form>
