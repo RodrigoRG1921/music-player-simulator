@@ -10,7 +10,9 @@ import { VscDiffAdded } from 'react-icons/vsc'
 import AddPlaylistModal from './components/AddPlaylistModal'
 import { AddSongToPlaylistModal } from './components/AddSongToPlaylistModal'
 import { IoMdAddCircleOutline } from 'react-icons/io'
-import { SongService } from './lib/service/songs'
+import { ApiService } from './lib/api.js'
+
+
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -33,7 +35,11 @@ export const App = () => {
 
 
   useEffect(() => {
-    setSongList(SongService.createSongs({ quantity: 50 }))
+    const fetchSongs = async () => {
+      const songs = await ApiService.getAllSongs()
+      setSongList(songs.data)
+    }
+    fetchSongs()
   }, []);
 
   const handleSubmitPlaylistModal = (newPlaylist) => {
@@ -64,10 +70,10 @@ export const App = () => {
       setIsPaused(!isPaused)
   }
   const handleSubmitModal = () => {
-      setSongList([...songList, song])
-      setCurrentSong(song)
+      ApiService.createSong(song)
       setSong({name:"", durationMinutes:"", durationSeconds:""})
       setSearchSongModal(false);
+
   }
 
   const handleSongClick = ({
@@ -128,16 +134,21 @@ export const App = () => {
     <div className="app">
 
       <div className="leftNavbar">
-        <Button title={"Search Song"} handleClick={() => setSearchSongModal(true)} icon={<BsSearch />}  />
-        <Button title={"New Song"} handleClick={() => setSearchSongModal(true)} icon={<IoMdAddCircleOutline />}  />
+        <Button title={"Search Song"} icon={<BsSearch />}  />
+        <Button
+          playlists={playlists}
+          title={"New Song"}
+          handleClick={() => setSearchSongModal(true)}
+          icon={<IoMdAddCircleOutline />}  />
         <Button title={"Create Playlist"} handleClick={() => setIsPlaylistModalOpen(true)} icon={<VscDiffAdded />}  />
         { playlists.map((playlist, index) =>
           <Playlist key={ index } { ...playlist } handlePlaylistClick={ handlePlaylistClick } />) }
       </div>
 
-        <div className="app-content">
+        <div className="app-content"> 
           { songList.length > 0 && (
             <div >
+            
               <SongList
                 songs={ currentPlaylist === 0 ? songList : playlists[currentPlaylist].songs }
                 handleSongClick={ handleSongClick }
@@ -148,7 +159,7 @@ export const App = () => {
         </div>
 
         <div className='player'>
-            <Timer currentSong={currentSong.name}
+            <Timer currentSong={currentSong}
                 currentTime={currentTime}
                 isPlaying={isPaused}
                 handlePauseClick={handlePauseClick}

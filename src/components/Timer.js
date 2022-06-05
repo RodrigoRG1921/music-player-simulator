@@ -5,7 +5,7 @@ import { FaRandom } from 'react-icons/fa'
 import { BiSkipNext } from 'react-icons/bi'
 
 export const Timer = ({currentSong, currentTime, isPlaying, handlePauseClick, handleRandomClick, handleSkipButton}) => {
-
+  
   return (
     <div className="playBox">
         <span>Current Song playing: {currentTime>0 ? currentSong : ""}</span>
