@@ -11,7 +11,7 @@ import AddPlaylistModal from './components/AddPlaylistModal'
 import { AddSongToPlaylistModal } from './components/AddSongToPlaylistModal'
 import { IoMdAddCircleOutline } from 'react-icons/io'
 import { ApiService } from './lib/api.js'
-
+import SearchScreen from './components/SearchScreen'
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -32,7 +32,7 @@ export const App = () => {
   const [searchSongModal, setSearchSongModal] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [songToPlaylist, setSongToPlaylist] = useState({})
-
+  const [isSearchScreenOpen, setIsSearchScreenOpen] = useState(false)
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -129,12 +129,15 @@ export const App = () => {
           clearInterval(intervalReference)
       }
   }, [songPlaying, currentTime, isPaused])
-
+  
   return (
     <div className="app">
 
       <div className="leftNavbar">
-        <Button title={"Search Song"} icon={<BsSearch />}  />
+        <Button
+          title={"Search Song"}
+          icon={<BsSearch />}
+          handleClick={() => setIsSearchScreenOpen(true)}  />
         <Button
           playlists={playlists}
           title={"New Song"}
@@ -148,12 +151,19 @@ export const App = () => {
         <div className="app-content"> 
           { songList.length > 0 && (
             <div >
-            
+              {isSearchScreenOpen ? 
+              <SearchScreen
+                songs={songList}
+                playlist={ playlists[currentPlaylist] }
+                handleExitClick={() => setIsSearchScreenOpen(false)}
+                /> 
+
+              :
               <SongList
                 songs={ currentPlaylist === 0 ? songList : playlists[currentPlaylist].songs }
                 handleSongClick={ handleSongClick }
                 playlist={ playlists[currentPlaylist] }
-                handleAddSongToPlaylist={handleAddSongToPlaylist} />
+                handleAddSongToPlaylist={handleAddSongToPlaylist} />}
             </div>
           ) }
         </div>
