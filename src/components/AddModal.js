@@ -2,9 +2,15 @@ import Form from 'react-bootstrap/Form'
 import React, { useState } from 'react'
 import { Button, Modal, FormControl, InputGroup,  } from "react-bootstrap";
 
-export const AddModal = ({ handleClose, show, handleSubmitModal, song, handleChangeSong, playlists}) => {
-  return (
+export const AddModal = ({ handleClose, show, handleSubmitModal, playlists}) => {
+  const [song, setSong] = useState({ name: '', durationMinutes:"", durationSeconds:""})
 
+  const handleChangeSong = ({ target }) => {
+    const { id, value } = target
+    setSong({ ...song, [id]: value})
+  }
+
+  return (
       <Modal show={show} onHide={handleClose} style={{color: "black"}}> 
         <Modal.Header closeButton>
           <Modal.Title> Search for a song </Modal.Title>
@@ -38,7 +44,7 @@ export const AddModal = ({ handleClose, show, handleSubmitModal, song, handleCha
              </InputGroup>
             <Form.Group className="mb-3">
               <Form.Label> Add to playlist </Form.Label>
-              <Form.Select aria-label="Default select example" id="playlist" value={song.playlist}>
+              <Form.Select aria-label="Default select example" id="playlist">
                 <option id="Favorites" >All songs</option>
                /* {playlists.map((playlist) => (
                   <option id={playlist} key={playlist.id}>{playlist.name}</option>
@@ -49,7 +55,7 @@ export const AddModal = ({ handleClose, show, handleSubmitModal, song, handleCha
         </Modal.Body>
         <Modal.Footer>
           <Button >Close</Button>
-          <Button onClick={handleSubmitModal}>Submit</Button>
+          <Button onClick={() => handleSubmitModal(song)}>Submit</Button>
         </Modal.Footer>
       </Modal>
     
