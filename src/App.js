@@ -40,7 +40,7 @@ export const App = () => {
       setSongList(songs.data)
     }
     fetchSongs()
-  }, []);
+  }, [searchSongModal]);
 
   const handleSubmitPlaylistModal = (newPlaylist) => {
     const newId = playlists.length;
@@ -69,8 +69,8 @@ export const App = () => {
   const handlePauseClick = () => {
       setIsPaused(!isPaused)
   }
-  const handleSubmitModal = () => {
-      ApiService.createSong(song)
+  const handleSubmitModal = (_song) => {
+      ApiService.createSong(_song)
       setSong({name:"", durationMinutes:"", durationSeconds:""})
       setSearchSongModal(false);
 
