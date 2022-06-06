@@ -11,14 +11,15 @@ const SongList = ({
   playlist,
   handleAddSongToPlaylist
 }) => (
-  <div className="songList">
+  <div className="songList"> 
     <div className='songList-title' >
       <h4>{ playlist.name }</h4>
+      <p>{ playlist.description }</p>
     </div>
     <div className="songList-content">
       { songs.map((song, index) => (
         <div className="songList-song" key={ `${song.name}-${index}` } >
-          <div>
+          <div> 
             <AiFillPlayCircle
               onClick={ () =>
                 handleSongClick(song) }
