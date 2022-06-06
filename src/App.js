@@ -37,19 +37,24 @@ export const App = () => {
   useEffect(() => {
     const fetchSongs = async () => {
       const songs = await ApiService.getAllSongs()
+      const playlists = await ApiService.getAllPlaylists()
+      setPlaylists(playlists.data)
       setSongList(songs.data)
     }
     fetchSongs()
-  }, [searchSongModal]);
+  }, [searchSongModal, isPlaylistModalOpen]);
 
   const handleSubmitPlaylistModal = (newPlaylist) => {
-    const newId = playlists.length;
-    setPlaylists((_playlists) => [..._playlists, { ...newPlaylist, id: newId, songs: [] }])
+    ApiService.createPlaylist(newPlaylist)
     setIsPlaylistModalOpen(false)
   }
 
-  const handlePlaylistClick = (id) => {
-    setCurrentPlaylist(id)
+  const handlePlaylistClick = async (id) => {
+    const _Playlist = await ApiService.getPlaylistById(id)
+    const playlistObject = _Playlist.data
+    setCurrentPlaylist(playlistObject)
+    setIsSearchScreenOpen(false)
+    
   }
 
   const handleSkipButton = (event) => {
@@ -85,6 +90,7 @@ export const App = () => {
     setCurrentSong(name)
     setCurrentTime(parseInt(totalTime))
     setSongPlaying(true)
+    setIsPaused(false)
   }
 
   const handleRandomClick = () => {
@@ -98,19 +104,15 @@ export const App = () => {
       } return
   }
 
-  const handleChangePlaylist = ({target}) => {
-      setCurrentPlaylist(target.value) 
-  }
-
   const handleAddSongToPlaylist = (song) => {
     setSongToPlaylist(song)
+    console.log(songToPlaylist)
     setAddSongToPlaylistModal(true)
   } 
 
   const handleSubmitSongToPlaylistModal = (playlistId) => {
-    const copyPlaylists = [...playlists]
-    copyPlaylists[playlistId].songs.push(songToPlaylist)
-    setPlaylists(copyPlaylists)
+    console.log("playlist id: ", playlistId)
+    ApiService.AddSongToPlaylist({idPlaylist: playlistId, idSong: songToPlaylist.id})
     setAddSongToPlaylistModal(false)
   }
 
@@ -129,7 +131,6 @@ export const App = () => {
           clearInterval(intervalReference)
       }
   }, [songPlaying, currentTime, isPaused])
-  
   return (
     <div className="app">
 
@@ -154,17 +155,18 @@ export const App = () => {
               {isSearchScreenOpen ? 
               <SearchScreen
                 songs={songList}
-                playlist={ playlists[currentPlaylist] }
+                playlist={ currentPlaylist }
                 handleExitClick={() => setIsSearchScreenOpen(false)}
+                handleSongClick={ handleSongClick }
+                handleAddSongToPlaylist={handleAddSongToPlaylist}
                 /> 
-
               :
               <SongList
-                songs={ currentPlaylist === 0 ? songList : playlists[currentPlaylist].songs }
+                songs={ currentPlaylist === 0 ? songList : currentPlaylist.songs }
                 handleSongClick={ handleSongClick }
-                playlist={ playlists[currentPlaylist] }
+                playlist={ currentPlaylist}
                 handleAddSongToPlaylist={handleAddSongToPlaylist} />}
-            </div>
+            </div> 
           ) }
         </div>
 
@@ -196,7 +198,6 @@ export const App = () => {
       <AddPlaylistModal
         show={ isPlaylistModalOpen }
         handleClose={ () => setIsPlaylistModalOpen(false) }
-        handleChangePlaylist={ handleChangePlaylist }
         handleSubmitModal={ handleSubmitPlaylistModal }
       />
 
