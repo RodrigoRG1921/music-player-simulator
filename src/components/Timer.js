@@ -10,14 +10,30 @@ export const Timer = ({currentSong, currentTime, isPlaying, handlePauseClick, ha
     <div className="playBox">
         <span>Current Song playing: {currentTime>0 ? currentSong : ""}</span>
         <div className="playBox-center">
-        <FaRandom className="playBox-icons" onClick={handleRandomClick} style={{cursor: "pointer", marginRight:"10px"}}/>
-        <BiSkipNext className="playBox-icons" onClick={handleSkipButton} size="35px" style={{transform: "rotate(180deg)"}} id="back" />
-        {!isPlaying ? <AiFillPauseCircle className="playBox-central-icons" size="30px " onClick={handlePauseClick} /> :
-        <AiFillPlayCircle className="playBox-central-icons" size="30px" onClick={handlePauseClick} /> }
-        <div onClick={handleSkipButton} id="next">
-          <BiSkipNext className="playBox-icons" size="35px" />
-        </div>
-        
+          <FaRandom
+            className="playBox-icons"
+            onClick={handleRandomClick}
+            style={{cursor: "pointer", marginRight:"10px"}}/>
+          <BiSkipNext
+            className="playBox-icons"
+            onClick={handleSkipButton}
+            size="35px"
+            style={{transform: "rotate(180deg)"}}
+            id="back" />
+           {!isPlaying ?
+            <AiFillPauseCircle
+              className="playBox-central-icons"
+              size="30px "
+              onClick={handlePauseClick} /> :
+            <AiFillPlayCircle
+              className="playBox-central-icons"
+              size="30px"
+              onClick={handlePauseClick} /> }
+          <BiSkipNext
+            onClick={handleSkipButton}
+            id="next"
+            className="playBox-icons"
+            size="35px" />
         </div>
         <div className="playbox-timer">
           <span>Time remaining: </span>
