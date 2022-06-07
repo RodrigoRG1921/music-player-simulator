@@ -33,7 +33,7 @@ export const App = () => {
   const [isPaused, setIsPaused] = useState(false)
   const [songToPlaylist, setSongToPlaylist] = useState({})
   const [isSearchScreenOpen, setIsSearchScreenOpen] = useState(false)
-
+  const [currentSongObject, setCurrentSongObject] = useState({})
   useEffect(() => {
     const fetchSongs = async () => {
       const songs = await ApiService.getAllSongs()
@@ -58,13 +58,18 @@ export const App = () => {
   }
 
   const handleSkipButton = (event) => {
-      /*if (target.id=="next"){
-          console.log(currentSong)
-          console.log(songList.indexOf(currentSong))
-          setCurrentSong(songList[songList.indexOf(currentSong)+1])
-      } else if (target.id=="back"){
-          setCurrentSong(songList[songList.indexOf(currentSong)-1])
-      } */
+    const currentIndex = currentPlaylist.songs.indexOf(currentSongObject)
+    console.log(currentPlaylist.songs.length)
+      if (event.target.id=="next" && currentIndex<currentPlaylist.songs.length-1){
+          const index = currentPlaylist.songs.indexOf(currentSongObject)+1
+          setCurrentSong(currentPlaylist.songs[index].name)
+          setCurrentSongObject(currentPlaylist.songs[index])
+      } else if (event.target.id=="back" && currentIndex>0){
+        console.log("back")
+        const index = currentPlaylist.songs.indexOf(currentSongObject)-1
+        setCurrentSong(currentPlaylist.songs[index].name)
+        setCurrentSongObject(currentPlaylist.songs[index])
+      } 
   }
   const handleChangeSong = ({ target }) => {
       const {id, value} = target
@@ -81,16 +86,13 @@ export const App = () => {
 
   }
 
-  const handleSongClick = ({
-    name,
-    durationMinutes,
-    durationSeconds
-  }) => {
-    const totalTime = ((durationMinutes*60000)+(durationSeconds*1000))
-    setCurrentSong(name)
+  const handleSongClick = (song) => {
+    const totalTime = ((song.durationMinutes*60000)+(song.durationSeconds*1000))
+    setCurrentSong(song.name)
     setCurrentTime(parseInt(totalTime))
     setSongPlaying(true)
     setIsPaused(false)
+    setCurrentSongObject(song)
   }
 
   const handleRandomClick = () => {
@@ -101,7 +103,7 @@ export const App = () => {
           setSongPlaying(true)
           const totalTime=((songToPlay.durationMinutes*60000)+(songToPlay.durationSeconds*1000))
           setCurrentTime(parseInt(totalTime))
-          setIsPaused(false)
+          setIsPaused(false)  
       } return
   }
 
