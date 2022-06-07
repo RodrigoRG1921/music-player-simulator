@@ -94,11 +94,12 @@ export const App = () => {
   }
 
   const handleRandomClick = () => {
-      if(songList.length>0){
-          getRandomInt(0,songList.length)
+      if(currentPlaylist.songs.length>0){
+          getRandomInt(0,currentPlaylist.songs.length>0)
+          const songToPlay= currentPlaylist.songs[getRandomInt(0,currentPlaylist.songs.length)]
+          setCurrentSong(songToPlay.name)
           setSongPlaying(true)
-          setCurrentSong(songList[getRandomInt(0,songList.length)])
-          const totalTime=((currentSong.durationMinutes*60000)+(currentSong.durationSeconds*1000))
+          const totalTime=((songToPlay.durationMinutes*60000)+(songToPlay.durationSeconds*1000))
           setCurrentTime(parseInt(totalTime))
           setIsPaused(false)
       } return
