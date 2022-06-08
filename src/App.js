@@ -19,6 +19,10 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min)
 }
 
+const getTotalTime = ({minutes, seconds}) => {
+  return (minutes*60000)+(seconds*1000)
+}
+
 export const App = () => {
   const [addSongToPlaylistModal, setAddSongToPlaylistModal] = useState(false)
   const [songList, setSongList] = useState([])
@@ -59,23 +63,32 @@ export const App = () => {
 
   const handleSkipButton = (event) => {
     const currentIndex = currentPlaylist.songs.indexOf(currentSongObject)
-    console.log(currentPlaylist.songs.length)
       if (event.target.id=="next" && currentIndex<currentPlaylist.songs.length-1){
           const index = currentPlaylist.songs.indexOf(currentSongObject)+1
           setCurrentSong(currentPlaylist.songs[index].name)
           setCurrentSongObject(currentPlaylist.songs[index])
-      } else if (event.target.id=="back" && currentIndex>0){
-        console.log("back")
+          const totalTime = getTotalTime({minutes:currentPlaylist.songs[index].durationMinutes, seconds: currentPlaylist.songs[index].durationSeconds})
+          setCurrentTime(parseInt(totalTime))
+      }
+      if (event.target.id=="next" && currentIndex == currentPlaylist.songs.length-1){
+        setCurrentSong(currentPlaylist.songs[0].name)
+        setCurrentSongObject(currentPlaylist.songs[0])
+        const totalTime = getTotalTime({minutes:currentPlaylist.songs[0].durationMinutes, seconds: currentPlaylist.songs[0].durationSeconds})
+        setCurrentTime(parseInt(totalTime))
+      }
+      if (event.target.id=="back" && currentIndex>0){
         const index = currentPlaylist.songs.indexOf(currentSongObject)-1
         setCurrentSong(currentPlaylist.songs[index].name)
         setCurrentSongObject(currentPlaylist.songs[index])
+        const totalTime = getTotalTime({minutes:currentPlaylist.songs[index].durationMinutes, seconds: currentPlaylist.songs[index].durationSeconds})
+        setCurrentTime(parseInt(totalTime))
       } 
   }
   const handleChangeSong = ({ target }) => {
       const {id, value} = target
       setSong({...song, [id]: value})
   }
-
+  
   const handlePauseClick = () => {
       setIsPaused(!isPaused)
   }
@@ -87,7 +100,7 @@ export const App = () => {
   }
 
   const handleSongClick = (song) => {
-    const totalTime = ((song.durationMinutes*60000)+(song.durationSeconds*1000))
+    const totalTime = getTotalTime({minutes:song.durationMinutes, seconds: song.durationSeconds})
     setCurrentSong(song.name)
     setCurrentTime(parseInt(totalTime))
     setSongPlaying(true)
@@ -125,7 +138,21 @@ export const App = () => {
               setCurrentTime((_currentTime) => _currentTime-1000)
           }else if (currentTime>0 && isPaused){
               setCurrentTime(currentTime)
-          } else{
+          } else if (currentTime==0 && !isPaused){
+            const currentIndex = currentPlaylist.songs.indexOf(currentSongObject)
+            if(currentIndex == currentPlaylist.songs.length-1){
+              setCurrentSong(currentPlaylist.songs[0].name)
+              setCurrentSongObject(currentPlaylist.songs[0])
+              const totalTime = getTotalTime({minutes:currentPlaylist.songs[0].durationMinutes, seconds: currentPlaylist.songs[0].durationSeconds})
+              setCurrentTime(parseInt(totalTime))
+            }else {
+              const index = currentPlaylist.songs.indexOf(currentSongObject)+1
+              setCurrentSong(currentPlaylist.songs[index].name)
+              setCurrentSongObject(currentPlaylist.songs[index])
+              const totalTime = getTotalTime({minutes:currentPlaylist.songs[index].durationMinutes, seconds: currentPlaylist.songs[index].durationSeconds})
+              setCurrentTime(parseInt(totalTime))
+            }
+          }else{
               setSongPlaying(false)
               clearInterval(intervalReference)           
           }
